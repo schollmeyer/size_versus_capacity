@@ -16,7 +16,7 @@ NAMES <- c("BUS-/LKW-FAHRER", "GESCHAEFTSFUEHRUNG","REINIGUNGSKRAFT","FRISEUR/IN
 objective <- oofos::compute_objective(data.frame(target=target %in% c(4,5)), "target", TRUE)
 dat <- as.data.frame(dat[,(1:10)])
 for(k in (1:10)){dat[,k]=as.factor(dat[,k])}
-context <- oofos:::get_auto_conceptual_scaling(dat[i,])
+context <- oofos:::get_auto_conceptual_scaling(dat[indexs,])
 
 D <- as.matrix(dist(context))
 nmds_results <- get_nmds_results(context=context,dimensions=(1:20))
