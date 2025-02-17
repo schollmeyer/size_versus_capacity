@@ -20,6 +20,17 @@ context <- oofos:::get_auto_conceptual_scaling(dat[indexs,])
 
 D <- as.matrix(dist(context))
 nmds_results <- get_nmds_results(context=context,dimensions=(1:20))
+size <- capacity <- rep(0,20)
+for(k in (1:20)){
+
+ CT <- get_context_from_distance(nmds_results$new_distances[[k]],threshold=0)$context
+
+ L <- oofos:::compute_concept_lattice(CT)
+ size[k] <- nrow(L$extents)
+ capacity[k] <- gurobi(oofos::compute_extent_vc_dimension(CT))$objval
+
+ }
+ 
 CT1 <- get_context_from_distance(nmds_results$new_distances[[1]],threshold=10)#Inf)
 CT2 <- get_context_from_distance(nmds_results$new_distances[[2]],threshold=3)
 CT3 <- get_context_from_distance(nmds_results$new_distances[[3]],threshold=0)
