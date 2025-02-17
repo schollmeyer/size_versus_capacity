@@ -1,7 +1,6 @@
 library(gurobi)
 set.seed(123456789)
-i=sample((1:1354),size=50,replace=FALSE)#75
-
+indexs <-sample((1:1354),size=50,replace=FALSE)
 setwd("C:/GIT/Datasets/Allbus_2018_ISSP2017")
 library(gurobi)
 library(foreign)
@@ -13,73 +12,14 @@ NAMES <- c("BUS-/LKW-FAHRER", "GESCHAEFTSFUEHRUNG","REINIGUNGSKRAFT","FRISEUR/IN
 
 
  dat <- na.omit(cbind(a$I001A_1,a$I001A_2,a$I001A_3,a$I001A_4,a$I001A_5,a$I001B_1,a$I001B_2,a$I001B_3,a$I001B_4,a$I001B_5,a$I017,a$I018) )
- target <- as.factor(dat[i,12])
- #dat <- dat[,(1:10)]
-
-
-
-
-
-
- #target <- as.factor(dat[,12]>=4)
-
- objective <- oofos::compute_objective(data.frame(target=target %in% c(4,5)), "target", TRUE)
-dat=as.data.frame(dat[,(1:10)])
+ target <- as.factor(dat[indexs,12])
+objective <- oofos::compute_objective(data.frame(target=target %in% c(4,5)), "target", TRUE)
+dat <- as.data.frame(dat[,(1:10)])
 for(k in (1:10)){dat[,k]=as.factor(dat[,k])}
-
 context <- oofos:::get_auto_conceptual_scaling(dat[i,])
 
-
-##END
-
-# without regularization:
-model <- oofos::optimize_on_context_extents(context,objective=objective)
-res <- gurobi(model)
-model$objval <- res$objval
-set.seed(1234567)
-test_without_regularization <- oofos::compute_extent_optim_test(model,n_rep=100)
-test_without_regularization$p_value
-# [1] 0.15
-
 D <- as.matrix(dist(context))
-CT_inf <- get_context_from_distance(D,threshold=Inf)
-CT0 <- get_context_from_distance(D,threshold=0)
-saveRDS(CT0,"CT0.RDS")
-dim(CT0$context)
-# [1]  1354 62617
-objval <- univariate_prediction(CT0$context,objective)$objval
-objval
-h0_values <- rep(0,10000)
-set.seed(1234567)
-for(k in (1:10000)){
-  h0_values[k] <- univariate_prediction(CT0$context,sample(objective))$objval
-
-}
-objval <- univariate_prediction(CT0$context,objective)$objval
-mean(h0_values >= objval)
-# [1] 0.0011
-
-significance_plot(h0_values,objval)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#regularization 1:
-nmds_results <- get_nmds_results(context=context,dimensions=c(9))#7,15))#c(8,12))
+nmds_results <- get_nmds_results(context=context,dimensions=(1:20))
 CT1 <- get_context_from_distance(nmds_results$new_distances[[1]],threshold=10)#Inf)
 CT2 <- get_context_from_distance(nmds_results$new_distances[[2]],threshold=3)
 CT3 <- get_context_from_distance(nmds_results$new_distances[[3]],threshold=0)
