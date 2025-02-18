@@ -11,7 +11,7 @@ get_null_distribution <- function(concept_lattice=NULL,context=NULL,n_rep,output
     }
   else{
 	model$obj[(1:n)] <- objective
-	result[k] <- gurobi(model,params=list(outputflag=outputflag))$objval  
+	result[k] <- gurobi::gurobi(model,params=list(outputflag=outputflag))$objval  
 	  }
   }
 return(result)}
