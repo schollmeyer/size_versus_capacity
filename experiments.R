@@ -1,6 +1,6 @@
 library(gurobi)
 set.seed(123456789)
-indexs <-sample((1:1354),size=50,replace=FALSE)
+indexs <-sample((1:1354),size=100,replace=FALSE)
 setwd("C:/GIT/Datasets/Allbus_2018_ISSP2017")
 library(gurobi)
 library(foreign)
@@ -30,7 +30,21 @@ for(k in (1:20)){
  capacity[k] <- gurobi(oofos::compute_extent_vc_dimension(CT))$objval
 
  }
- 
+
+
+plot(log2(size),capacity)
+
+
+
+
+
+
+
+
+
+
+
+
 CT1 <- get_context_from_distance(nmds_results$new_distances[[1]],threshold=10)#Inf)
 CT2 <- get_context_from_distance(nmds_results$new_distances[[2]],threshold=3)
 CT3 <- get_context_from_distance(nmds_results$new_distances[[3]],threshold=0)
