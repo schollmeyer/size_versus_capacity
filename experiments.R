@@ -1,6 +1,6 @@
 library(gurobi)
 set.seed(123456789)
-indexs <-sample((1:1354),size=100,replace=FALSE)
+indexs <-sample((1:1354),size=500,replace=FALSE)
 setwd("C:/GIT/Datasets/Allbus_2018_ISSP2017")
 library(gurobi)
 library(foreign)
