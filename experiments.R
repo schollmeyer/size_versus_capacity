@@ -1,18 +1,14 @@
 library(gurobi)
 set.seed(123456789)
-indexs <-sample((1:1354),size=500,replace=FALSE)
+indexs <-sample((1:1354),size=100,replace=FALSE)
 setwd("C:/GIT/Datasets/Allbus_2018_ISSP2017")
 library(gurobi)
 library(foreign)
 library(rsubgroup)
 a <- read.spss("ZA5270_v2-0-0.sav",to.data.frame=TRUE)
-
 NAMES <- c("BUS-/LKW-FAHRER", "GESCHAEFTSFUEHRUNG","REINIGUNGSKRAFT","FRISEUR/IN","LEITER PERSONALABTEILUNG","RECHTSANWALT","AUTOMECHANIKER/IN","KRANKENPFLEGER/IN","POLIZIST/IN","LEHRER/IN","WIE OFT: MIT FREUNDEN AUSGEHEN","WIE OFT: NEUE FREUNDSCHAFTEN SCHLIESSEN")
-
-
-
- dat <- na.omit(cbind(a$I001A_1,a$I001A_2,a$I001A_3,a$I001A_4,a$I001A_5,a$I001B_1,a$I001B_2,a$I001B_3,a$I001B_4,a$I001B_5,a$I017,a$I018) )
- target <- as.factor(dat[indexs,12])
+dat <- na.omit(cbind(a$I001A_1,a$I001A_2,a$I001A_3,a$I001A_4,a$I001A_5,a$I001B_1,a$I001B_2,a$I001B_3,a$I001B_4,a$I001B_5,a$I017,a$I018) )
+target <- as.factor(dat[indexs,12])
 objective <- oofos::compute_objective(data.frame(target=target %in% c(4,5)), "target", TRUE)
 dat <- as.data.frame(dat[,(1:10)])
 for(k in (1:10)){dat[,k]=as.factor(dat[,k])}
